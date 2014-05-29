@@ -2,6 +2,10 @@ from dota2py import api
 from pymongo import MongoClient
 import pdb
 import json
+import logging
+
+logging.basicConfig(level=logging.INFO, filename='log.txt', format="%(asctime)s - %(name)s - %(message)s")
+logger = logging.getLogger(__name__)
 
 class GameModes:
     UNKNOWN, ALL_PICK, CAPTAINS_MODE, RANDOM_DRAFT, SINGLE_DRAFT, ALL_RANDOM, DEATH, DIRETIDE, REVERSE, GREEVILING, TUTORIAL, MID_ONLY, LEAST_PLAYED, NEW_PLAYER, COMPENDIUM, CUSTOM, CAPTAINS_DRAFT, BALANCED_DRAFT, ABILITY_DRAFT = range(19)
@@ -18,11 +22,11 @@ def match_valid(match_detail):
 
 def data_valid(match):
     if data['status'] != 1:
-        print "Error - Status : %s" % data['status']
+        logger.degug("Invalid data : status-%s" % data['status'])
         return False
 
     if data['total_results'] == 0:
-        print "Error - No values"
+        logger.debug("Cannot find any matches in data")
         return False
 
     return True
@@ -40,6 +44,5 @@ if __name__ == '__main__':
                 db.matches.insert(match)
                 count += 1
 
-
-
-
+    logger.info("Added %s new matches" % count);
+    logger.info("Currently at %s matches in the database" % db.matches.count())
