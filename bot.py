@@ -4,6 +4,9 @@ import pdb
 import json
 import logging
 
+requests_log = logging.getLogger("requests")
+requests_log.setLevel(logging.WARNING)
+
 logging.basicConfig(level=logging.INFO, filename='botpy.log', format="%(asctime)s - %(name)s - %(message)s")
 logger = logging.getLogger(__name__)
 
