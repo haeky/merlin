@@ -44,7 +44,7 @@ if __name__ == '__main__':
         for match in data['matches']:
             match_detail = api.get_match_details(match['match_id'])['result']
             if match_valid(match_detail):
-                db.matches.insert(match)
+                db.matches.insert(match_detail)
                 count += 1
 
     logger.info("Added %s new matches" % count);
