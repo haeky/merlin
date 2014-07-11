@@ -20,7 +20,7 @@ NUM_MATCHES = matches.count()
 X = np.zeros((NUM_MATCHES, NUM_FEATURES), dtype=np.int8)
 Y = np.zeros(NUM_MATCHES, dtype=np.int8)
 
-widgets = ['Progress: ', Percentage(), ' ', Bar(marker='=', left='[', right=']'), ' ', ETA(), ' ', FileTransferSpeed()]
+widgets = ['Progress: ', Percentage(), ' ', Bar(marker='=', left='[', right=']'), ' ', ETA()]
 pbar = ProgressBar(widgets=widgets, maxval=NUM_MATCHES)
 pbar.start()
 
