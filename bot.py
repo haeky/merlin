@@ -34,6 +34,16 @@ def data_valid(match):
 
     return True
 
+def filter_match_detail(match_detail):
+    match_detail_filtered = { 'match_id' : match_detail['match_id'], 'radiant_win' : match_detail['radiant_win'] }
+    match_detail_filtered['players'] = []
+
+    for i, player in enumerate(match_detail['players']):
+        player_detail = { 'player_slot' : player['player_slot'], 'hero_id': player['hero_id'] }
+        match_detail_filtered['players'].append(player_detail)
+
+    return match_detail_filtered
+
 if __name__ == '__main__':
     client = MongoClient('mongodb://localhost:27017/')
     db = client.merlin
@@ -44,7 +54,7 @@ if __name__ == '__main__':
         for match in data['matches']:
             match_detail = api.get_match_details(match['match_id'])['result']
             if match_valid(match_detail):
-                db.matches.insert(match_detail)
+                db.matches.insert(filter_match_detail(match_detail))
                 count += 1
 
     logger.info("Added %s new matches" % count);
