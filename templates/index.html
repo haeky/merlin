@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block main %}
+       
+<form action="/recommend" method="POST" role="form">
+  <fieldset>
+    <div class="form-group">
+      <label>Modèle</label>
+      <select class="form-control" id="model_name" name="model_name">
+        <option value="knn">K Nearest Neighbor</option>
+        <option value="lr">Logistic Regression</option>
+      </select>
+   </div>
+   <div class="dire form-group">
+      <label>My Team</label>
+      <input id="dire_team" type="hidden" name="dire_team" />
+      <div class="dire_heroes" style="margin: 5px"></div>
+      <input type="text" class="form-control typeahead">
+   </div>
+   <div class="radiant form-group">
+      <label>Enemy Team</label>
+      <input id="radiant_team" type="hidden" name="radiant_team" />
+      <div class="radiant_heroes" style="margin: 5px;"></div>
+      <input type="text" class="form-control typeahead">
+   </div>
+   <button id="submit" type="submit" class="btn btn-default">Submit</button>
+  </fieldset>
+</form>
+
+<script>
+  var data = {{ data|safe }};
+  var dire_team = []
+  var radiant_team = []
+
+  $('input.typeahead').typeahead({ local: data });
+
+  $('input.typeahead').on('typeahead:selected', function(event, selection) {
+    var team = $(this).parent().closest('div').attr('class').split(' ')[0];
+    team == 'dire' ? t = dire_team : t = radiant_team; 
+    n = t.length
+    if (team == 'dire' && n < 4 || team == 'radiant' && n < 5) {
+      t.push(selection.value);
+      $("#"+team+"_team").val(JSON.stringify(t));               
+      $('.'+team+'_heroes').html(t.join());
+    }
+
+    var index = data.indexOf(selection.value);
+    if (index != -1) {
+      data.splice(index, 1);
+      $('input.typeahead').typeahead('destroy');
+      $('input.typeahead').typeahead({ local: data });
+    } 
+
+    $('input.typeahead').typeahead('setQuery', '')
+    $(this).focus();
+  });
+</script>
+{% endblock %}
