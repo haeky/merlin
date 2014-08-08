@@ -54,4 +54,4 @@ class Train:
 if __name__ == '__main__':
     x, y = Train().build_data()
     Train().build_lr_model(x, y, True)
-    Train().build_knn_model(x, y, True)
+    Train().build_knn_model(x, y, 15, True)

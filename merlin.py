@@ -1,4 +1,3 @@
-from sklearn.externals import joblib
 import numpy as np
 import json
 
@@ -13,6 +12,17 @@ hero_ids = set(hero['id'] for hero in heroes)
 missing_ids = list(set(range(1, NUM_HEROES + 1)) - hero_ids)
 
 class Merlin:
+    def get_heroes_localized_name(self):
+        return [ hero['localized_name'] for hero in heroes ]
+
+    def from_heroes_localized_name_to_ids(self, team):
+        ids = []
+        for selected_hero in team:
+            for hero in heroes:
+                if selected_hero == hero['localized_name']:
+                    ids.append(hero['id'])
+        return ids
+
     def to_hero_localized_name(self, hero_id):
         for hero in heroes:
             if hero['id'] == hero_id:
@@ -41,6 +51,5 @@ class Merlin:
         for hero_id, team in available_heroes:
             probability = self.probability(model, team, enemy_team)
             recommendation.append((probability, self.to_hero_localized_name(hero_id)))
-
         return sorted(recommendation, reverse=True)[0:5-len(my_team)]
 
